@@ -1,12 +1,27 @@
 ﻿
-<!DOCTYPE html>
+    <section id="slider">
+        <!--slider-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    @await  Html.PartialAsync("Partial/_Slider")
+                </div>
+            </div>
+        </div>
+    </section><!--/slider-->
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <h2>This is Index, Baby</h2>
-</body>
-</html>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    @await  Html.PartialAsync("Partial/_LeftSidebar")
+                </div>
+
+                <div class="col-sm-9 padding-right">
+                    @await  Html.PartialAsync("Partial/_FeaturesItems")
+                    @await  Html.PartialAsync("Partial/_CategoryTab")
+                    @await  Html.PartialAsync("Partial/_RecommendedItems")
+                </div>
+            </div>
+        </div>
+    </section>

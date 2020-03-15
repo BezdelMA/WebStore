@@ -41,15 +41,17 @@ namespace WebStore.Controllers
                 StartOfWork = new DateTime(2018, 11, 05)
             }
         };
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+        public IActionResult Error404() => View();
+        public IActionResult Blog() => View();
+        public IActionResult BlogSingle() => View();
+        public IActionResult Cart() => View();
+        public IActionResult Checkout() => View();
+        public IActionResult ContactUs() => View();
+        public IActionResult Login() => View();
+        public IActionResult Shop() => View();
+        public IActionResult ProductDetails() => View();
 
-        public IActionResult Test()
-        {
-            return View();
-        }
         public IActionResult Employees()
         {
             return View(lEmployees);
