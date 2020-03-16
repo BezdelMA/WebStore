@@ -3,55 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly List<Employee> lEmployees = new List<Employee>()
+        private readonly IEmployeesData _employeesData;
+        public EmployeeController (IEmployeesData employeesData)
         {
-            new Employee
-            {
-                Id = 1,
-                Surname = "Иванов",
-                Name = "Сергей",
-                Age = 26,
-                LevelEducation = "высшее",
-                StartOfWork = new DateTime(2015, 01, 15)
-            },
-
-            new Employee
-            {
-                Id = 2,
-                Surname = "Смирнов",
-                Name = "Анатолий",
-                Age = 34,
-                LevelEducation = "среднее специальное",
-                StartOfWork = new DateTime(2015, 03, 20)
-            },
-
-            new Employee
-            {
-                Id = 3,
-                Surname = "Петрова",
-                Name = "Елизавета",
-                Age = 24,
-                LevelEducation = "неоконченное высшее",
-                StartOfWork = new DateTime(2018, 11, 05)
-            }
-        };
-
+            _employeesData = employeesData;
+        }
         public IActionResult Index()
         {
-            return View(lEmployees);
+            return View(_employeesData.GetAll());
         }
         public IActionResult Employee(int Id)
         {
-            var employee = lEmployees.FirstOrDefault(e => e.Id == Id);
-            if (employee == null)
-                return NotFound();
-            return View(employee);
+            return View(_employeesData.GetById(Id));
+        }
+
+        public IActionResult Edit(int id)
+        {
+            if (id == 0)
+                return View(new EmployeeViewModel());
+
+            var model = _employeesData.GetById(id);
+            return View(new EmployeeViewModel
+            { Id = model.Id,
+                Surname = model.Surname,
+                Name = model.Name,
+                Age = model.Age,
+                LevelEducation = model.LevelEducation,
+                StartOfWork = model.StartOfWork
+            });
+        }
+        
+        [HttpPost]
+        public IActionResult Edit(Employee employee)
+        {
+            _employeesData.Edit(employee, employee.Id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteByID(int id)
+        {
+            _employeesData.DeleteById(id);
+            return RedirectToAction("Index");
         }
     }
 }
