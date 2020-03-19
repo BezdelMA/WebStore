@@ -29,7 +29,7 @@ namespace WebStore.Controllers
         {
             if (id == 0)
                 return View(new EmployeeViewModel());
-
+            
             var model = _employeesData.GetById(id);
             return View(new EmployeeViewModel
             { Id = model.Id,
@@ -42,9 +42,23 @@ namespace WebStore.Controllers
         }
         
         [HttpPost]
-        public IActionResult Edit(Employee employee)
+        public IActionResult Edit(EmployeeViewModel employee)
         {
-            _employeesData.Edit(employee, employee.Id);
+            if (employee == null)
+                throw new ArgumentNullException();
+
+            if (!ModelState.IsValid)
+                return View(employee);
+            
+            else _employeesData.AddNewEmployee(new Employee
+            {
+                Name = employee.Name,
+                Surname = employee.Surname,
+                LevelEducation = employee.LevelEducation,
+                Age = employee.Age,
+                StartOfWork = employee.StartOfWork
+            });
+
             return RedirectToAction("Index");
         }
 
