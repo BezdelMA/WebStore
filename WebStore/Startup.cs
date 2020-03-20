@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.Infrastructure.Interfaces;
+using WebStore.Infrastructure.Services;
 using WebStore.ViewModels;
 
 namespace WebStore
@@ -20,6 +21,7 @@ namespace WebStore
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            services.AddSingleton<IProductData, InMemoryProductData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
