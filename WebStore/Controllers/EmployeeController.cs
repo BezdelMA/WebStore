@@ -42,9 +42,23 @@ namespace WebStore.Controllers
         }
         
         [HttpPost]
-        public IActionResult Edit(Employee employee)
+        public IActionResult Edit(EmployeeViewModel employee)
         {
-            _employeesData.Edit(employee, employee.Id);
+            if (employee is null)
+                throw new ArgumentNullException(nameof(Employee));
+
+            if (!ModelState.IsValid)
+                return View(employee);
+
+            var id = employee.Id;
+            if (id == 0)
+                _employeesData.AddNewEmployee(new Employee
+                {
+                    Name = employee.Name,
+                    Surname = employee.Surname,
+                    LevelEducation = employee.LevelEducation,
+                    Age = employee.Age
+                });
             return RedirectToAction("Index");
         }
 
