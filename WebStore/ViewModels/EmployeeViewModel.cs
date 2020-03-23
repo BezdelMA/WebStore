@@ -20,6 +20,7 @@ namespace WebStore.ViewModels
         [Display(Name = "Имя")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Имя является обязательным")]
         [StringLength(maximumLength: 200, MinimumLength = 3, ErrorMessage = "Длина строки от 3 до 200 символов")]
+        [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         [RegularExpression(@"(?:[А-ЯЁ][а-яё]+)|(?:[A-Z][a-z]+)", ErrorMessage = "Ошибка формата имени - либо кириллица, латиница")]
         public string Name { get; set; }
 
