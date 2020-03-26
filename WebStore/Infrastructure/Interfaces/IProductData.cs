@@ -18,5 +18,7 @@ namespace WebStore.Infrastructure.Interfaces
         /// <param name="Filter">Критерий поиска/фильтрации</param>
         /// <returns>Искомые товары из каталога товаров</returns>
         IEnumerable<Product> GetProducts(ProductFilter Filter = null);
+
+        Product GetProductById(int id);
     }
 }
