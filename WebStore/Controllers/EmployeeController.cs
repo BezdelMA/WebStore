@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
+    
+    [Authorize]
     public class EmployeeController : Controller
     {
+        
         private readonly IEmployeesData _employeesData;
         public EmployeeController (IEmployeesData employeesData)
         {
@@ -48,6 +53,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult DeleteByID(int id)
         {
             _employeesData.DeleteById(id);

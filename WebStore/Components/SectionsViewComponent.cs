@@ -15,11 +15,6 @@ namespace WebStore.Components
 
         public IViewComponentResult Invoke() => View(GetSections());
 
-        //public async Task<IViewComponentResult> InvokeAsync()
-        //{
-
-        //}
-
         private IEnumerable<SectionViewModel> GetSections()
         {
             var sections = _ProductData.GetSections().ToArray();

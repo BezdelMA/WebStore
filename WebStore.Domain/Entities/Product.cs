@@ -17,6 +17,8 @@ namespace WebStore.Domain.Entities
         public int SectionId { get; set; }
 
         public int? BrandId { get; set; }
+        [ForeignKey(nameof(BrandId))]
+        public virtual Brand Brand { get; set; }
 
         public string ImageUrl { get; set; }
 
