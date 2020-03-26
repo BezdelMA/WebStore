@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using WebStore.Controllers;
 using WebStore.DAL.Context;
 using WebStore.Data;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Implementations.Sql;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
@@ -34,6 +35,40 @@ namespace WebStore
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<DbInitializer>();
 
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<WebStoreContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredUniqueChars = 3;
+
+                //opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCD...123457890";
+                opt.User.RequireUniqueEmail = false;
+
+                opt.Lockout.AllowedForNewUsers = true;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            });
+
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "WebStore";
+                opt.Cookie.HttpOnly = true;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(10);
+
+                opt.LoginPath = "/Account/Login";
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+
+                opt.SlidingExpiration = true;
+            });
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
@@ -51,6 +86,7 @@ namespace WebStore
 
             app.UseStaticFiles();
             app.UseDefaultFiles();
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
