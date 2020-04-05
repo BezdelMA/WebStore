@@ -12,9 +12,9 @@ namespace WebStore.Infrastructure.Services
 {
     public class CookiesCartService : ICartService
     {
-        private readonly string _CartName;
-        private readonly IProductData _ProductData;
-        private readonly IHttpContextAccessor _HttpContextAccessor;
+        readonly string _CartName;
+        readonly IProductData _ProductData;
+        readonly IHttpContextAccessor _HttpContextAccessor;
 
         private Cart Cart
         {
@@ -99,18 +99,22 @@ namespace WebStore.Infrastructure.Services
 
         public CartViewModel TransformFromCart()
         {
-            var products = _ProductData.GetProducts(new ProductFilter
-            {
-                Ids = Cart.Items.Select(item => item.ProductId).ToList()
-            });
-
-            var product_view_models = products.ToView();
+            var cart_items = Cart.Items;
+            var products = _ProductData
+               .GetProducts(new ProductFilter
+               {
+                   Ids = cart_items.Select(item => item.ProductId).ToList()
+               })
+               .ToView()
+               .ToDictionary(p => p.Id);
 
             return new CartViewModel
             {
-                Items = Cart.Items.ToDictionary(
-                    item => product_view_models.First(p => p.Id == item.ProductId),
-                    item => item.Quantity
+                Items = cart_items
+                   .Where(item => products.ContainsKey(item.ProductId))
+                   .ToDictionary(
+                        item => products[item.ProductId],
+                        item => item.Quantity
                     )
             };
         }
