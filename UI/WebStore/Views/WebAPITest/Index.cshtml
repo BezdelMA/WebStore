@@ -1,0 +1,20 @@
+﻿@model IEnumerable<string>
+
+<div class="container">
+    <table class="table, table-bordered col-md-2">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Values</th>
+            </tr>
+        </thead>
+        @{var i = 0;}
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@(i++)</td>
+                <td>@item</td>
+            </tr>
+        }
+    </table>
+</div>
