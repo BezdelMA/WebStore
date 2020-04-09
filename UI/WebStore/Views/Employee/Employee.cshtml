@@ -1,0 +1,16 @@
+﻿@model WebStore.Models.Employee
+
+    <div class="container">
+        <table class="table">
+            <tr>
+                <td>@Model.Surname</td>
+                <td>@Model.Name</td>
+                <td>@Model.Age лет</td>
+                <td>@Model.LevelEducation образование</td>
+                <td>В конторе с @Model.StartOfWork.ToShortDateString() года</td>
+                <td><a asp-controller="Employee" asp-action="Index">Назад</a></td>
+            </tr>
+                
+        </table>
+        
+    </div>
